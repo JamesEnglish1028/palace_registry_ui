@@ -12,6 +12,22 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
   isNativeApp = false, 
   onAddLibrary 
 }) => {
+  const handleMeBooksClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (typeof window !== 'undefined' && (window as any).MeBooksIntegration) {
+      const mebooks = new (window as any).MeBooksIntegration();
+      await mebooks.importCatalog(library.catalogUrl!, library.name);
+    } else {
+      // Fallback to direct URL if integration library not loaded
+      window.open(
+        `https://jamesenglish1028.github.io/JamesEnglish1028-My-Ebook-Reader/?import=${encodeURIComponent(library.catalogUrl!)}&name=${encodeURIComponent(library.name)}`,
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-darkSurface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
       <div className="flex items-start gap-4">
@@ -69,10 +85,8 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
             )}
             
             {/* MeBooks Web Reader Button */}
-            <a
-              href={`https://jamesenglish1028.github.io/JamesEnglish1028-My-Ebook-Reader/?import=${encodeURIComponent(library.catalogUrl)}&name=${encodeURIComponent(library.name)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={handleMeBooksClick}
               className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
               title={`Read ${library.name} books in MeBooks web reader`}
               aria-label={`Open ${library.name} in MeBooks web reader`}
@@ -81,7 +95,7 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
                 <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
               </svg>
               MeBooks
-            </a>
+            </button>
 
             {/* Thorium Desktop Button */}
             <a

@@ -224,7 +224,41 @@ The web app now supports **three reading platforms**:
 
 #### 4. Web Reader Integration (MeBooks)
 
-To integrate with MeBooks web reader, the target app needs to handle import parameters:
+**Using the MeBooks Integration Library:**
+
+The registry includes a lightweight JavaScript library for easy MeBooks integration:
+
+**Step 1: Include the script**
+```html
+<script src="https://jamesenglish1028.github.io/https-github.com-JamesEnglish1028-palace_registry_ui/mebooks-integration.js"></script>
+```
+
+**Step 2: Initialize**
+```javascript
+const mebooks = new MeBooksIntegration('https://your-mebooks-url.com/');
+// Or use default MeBooks URL:
+const mebooks = new MeBooksIntegration();
+```
+
+**Step 3: Use**
+```javascript
+// Import catalog with one line
+await mebooks.importCatalog(catalogUrl, catalogName);
+
+// With options
+await mebooks.importCatalog(catalogUrl, catalogName, {
+  theme: 'dark',           // Optional: set theme
+  autoNavigate: true,      // Optional: auto-navigate to catalog
+  newWindow: true          // Optional: open in new window (default: true)
+});
+
+// Or generate a link
+const link = mebooks.getCatalogLink(catalogUrl, catalogName);
+```
+
+**Alternative: Manual URL Parameter Handling**
+
+If you prefer not to use the integration library:
 
 **URL Parameters:**
 - `import`: OPDS catalog URL to automatically add to user's library
@@ -267,6 +301,7 @@ const addOPDSCatalog = async (url: string, name: string) => {
 - **No Manual Setup**: Catalog automatically appears in reader app
 - **Cross-Platform**: Works with any web-based OPDS reader
 - **Bookmarkable**: Users can bookmark specific catalogs
+- **Type-Safe**: Integration library provides full TypeScript support
 
 #### 5. Native App Setup
 
