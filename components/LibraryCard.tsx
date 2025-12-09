@@ -45,27 +45,42 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
         </div>
       </div>
       
-      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap justify-end gap-2">
         {library.catalogUrl ? (
-          isNativeApp ? (
-            <button
-              onClick={() => onAddLibrary?.(library.catalogUrl!, library.name)}
-              className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-              aria-label={`Add ${library.name}`}
+          <>
+            {isNativeApp ? (
+              <button
+                onClick={() => onAddLibrary?.(library.catalogUrl!, library.name)}
+                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                aria-label={`Add ${library.name}`}
+                title={`Add ${library.name} to your Palace app`}
+              >
+                Palace
+              </button>
+            ) : (
+              <a
+                href={`palace://addLibrary?url=${encodeURIComponent(library.catalogUrl)}&name=${encodeURIComponent(library.name)}`}
+                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                title={`Open ${library.name} in Palace app`}
+                aria-label={`Open ${library.name} in Palace app`}
+              >
+                Palace
+              </a>
+            )}
+            
+            {/* Thorium Desktop Button */}
+            <a
+              href={library.catalogUrl.replace(/^https?:\/\//, 'opds://')}
+              className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-sky-400 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors"
+              title={`Open ${library.name} in Thorium Desktop`}
+              aria-label={`Open ${library.name} in Thorium Desktop`}
             >
-              Add Library
-            </button>
-          ) : (
-            <a 
-              href={library.catalogUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-              aria-label={`Add ${library.name}`}
-            >
-              Add Library
+              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+              Thorium
             </a>
-          )
+          </>
         ) : (
           <span className="text-sm text-gray-400 italic">Catalog unavailable</span>
         )}

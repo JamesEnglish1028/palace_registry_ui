@@ -11,6 +11,8 @@ A responsive web application for browsing and searching libraries from the Palac
 - ⚡ **Fast Loading** - Efficient data fetching with loading states
 - 🎨 **Clean UI** - Modern interface with Tailwind CSS styling
 - ♿ **Accessible** - Proper ARIA labels and semantic HTML
+- 🔗 **Multi-App Integration** - Open libraries in Palace app or Thorium Desktop
+- 📖 **Universal Palace Button** - Smart integration for iOS, macOS, and WebView
 
 ## Tech Stack
 
@@ -71,7 +73,14 @@ The built files will be in the `dist/` directory.
 - Browse all available Palace Project libraries
 - Use the search box to find libraries by name or description
 - Select a state from the dropdown to filter results
-- Click "Add Library" to access a library's catalog
+- Click **"Palace"** to open library in Palace app (iOS/macOS/WebView)
+- Click **"Thorium"** to open library in Thorium Desktop
+
+### Button Functionality
+- **Palace Button**: Universal integration
+  - **Native Mode** (`?native=true`): Communicates with parent WebView
+  - **Web Mode**: Uses `palace://` URL scheme to launch Palace app
+- **Thorium Button**: Converts HTTP to `opds://` for Thorium Desktop
 
 ### Dark Mode
 Add `?theme=dark` to the URL to enable dark mode:
@@ -91,11 +100,16 @@ http://localhost:3000/?native=true&theme=dark
 http://localhost:3000/?native=true&theme=light
 ```
 
-When in native mode, the "Add Library" button will attempt to communicate with the native app using multiple methods:
-- **Custom URL Scheme**: `palace://addLibrary?url=...&name=...`
+When in native mode, the **"Palace"** button will communicate with the native app using multiple methods:
 - **PostMessage**: Messages sent to parent frame (WebView)
 - **iOS WebKit Bridge**: `webkit.messageHandlers.palaceApp`
 - **Android Interface**: `window.Android.addLibrary()`
+
+When in web mode, the **"Palace"** button uses:
+- **Custom URL Scheme**: `palace://addLibrary?url=...&name=...` (iOS/macOS)
+
+The **"Thorium"** button uses:
+- **OPDS URL Scheme**: Converts `https://` to `opds://` for Thorium Desktop
 
 ### Mobile Usage
 The app is optimized for mobile devices with:
@@ -142,9 +156,14 @@ The web app can communicate with native mobile apps through several methods:
 
 #### 2. Communication Methods
 
-**Custom URL Scheme:**
+**Palace URL Scheme (iOS/macOS):**
 ```javascript
 palace://addLibrary?url=<catalogUrl>&name=<libraryName>
+```
+
+**Thorium OPDS Scheme:**
+```javascript
+opds://example.com/catalog  // Converted from https://example.com/catalog
 ```
 
 **iOS WebKit Message Handler:**
@@ -171,7 +190,21 @@ window.parent.postMessage({
 }, '*');
 ```
 
-#### 3. Native App Setup
+#### 3. App Integration Overview
+
+The web app now supports **two reading apps**:
+
+**Palace Integration:**
+- **iOS/macOS**: Uses `palace://` URL scheme
+- **WebView**: Uses JavaScript bridges for native app communication
+- **Universal**: One button works across all Palace app platforms
+
+**Thorium Desktop Integration:**
+- **Desktop Only**: Uses `opds://` URL scheme
+- **Cross-Platform**: Works on Windows, macOS, Linux
+- **Direct Launch**: Opens library catalog directly in Thorium
+
+#### 4. Native App Setup
 
 **iOS (Swift):**
 ```swift
