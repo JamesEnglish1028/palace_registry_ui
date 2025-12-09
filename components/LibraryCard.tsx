@@ -68,6 +68,21 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
               </a>
             )}
             
+            {/* MeBooks Web Reader Button */}
+            <a
+              href={`https://jamesenglish1028.github.io/JamesEnglish1028-My-Ebook-Reader/?import=${encodeURIComponent(library.catalogUrl)}&name=${encodeURIComponent(library.name)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+              title={`Read ${library.name} books in MeBooks web reader`}
+              aria-label={`Open ${library.name} in MeBooks web reader`}
+            >
+              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+              </svg>
+              MeBooks
+            </a>
+
             {/* Thorium Desktop Button */}
             <a
               href={library.catalogUrl.replace(/^https?:\/\//, 'opds://')}

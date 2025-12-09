@@ -11,8 +11,9 @@ A responsive web application for browsing and searching libraries from the Palac
 - ⚡ **Fast Loading** - Efficient data fetching with loading states
 - 🎨 **Clean UI** - Modern interface with Tailwind CSS styling
 - ♿ **Accessible** - Proper ARIA labels and semantic HTML
-- 🔗 **Multi-App Integration** - Open libraries in Palace app or Thorium Desktop
+- 🔗 **Multi-App Integration** - Open libraries in Palace, MeBooks, or Thorium
 - 📖 **Universal Palace Button** - Smart integration for iOS, macOS, and WebView
+- 📚 **Web Reader Integration** - Direct integration with MeBooks web-based EPUB/PDF reader
 
 ## Tech Stack
 
@@ -74,12 +75,17 @@ The built files will be in the `dist/` directory.
 - Use the search box to find libraries by name or description
 - Select a state from the dropdown to filter results
 - Click **"Palace"** to open library in Palace app (iOS/macOS/WebView)
+- Click **"MeBooks"** to read books in web-based reader with full OPDS support
 - Click **"Thorium"** to open library in Thorium Desktop
 
 ### Button Functionality
 - **Palace Button**: Universal integration
   - **Native Mode** (`?native=true`): Communicates with parent WebView
   - **Web Mode**: Uses `palace://` URL scheme to launch Palace app
+- **MeBooks Button**: Web-based reading platform
+  - **Direct Integration**: Opens catalog in MeBooks web reader
+  - **Full OPDS Support**: Browse, borrow, and read EPUB/PDF books
+  - **Offline Reading**: Books stored locally in browser storage
 - **Thorium Button**: Converts HTTP to `opds://` for Thorium Desktop
 
 ### Dark Mode
@@ -161,6 +167,11 @@ The web app can communicate with native mobile apps through several methods:
 palace://addLibrary?url=<catalogUrl>&name=<libraryName>
 ```
 
+**MeBooks Web Reader Integration:**
+```javascript
+https://your-mebooks-app.com/?import=<catalogUrl>&name=<libraryName>
+```
+
 **Thorium OPDS Scheme:**
 ```javascript
 opds://example.com/catalog  // Converted from https://example.com/catalog
@@ -192,19 +203,72 @@ window.parent.postMessage({
 
 #### 3. App Integration Overview
 
-The web app now supports **two reading apps**:
+The web app now supports **three reading platforms**:
 
 **Palace Integration:**
 - **iOS/macOS**: Uses `palace://` URL scheme
 - **WebView**: Uses JavaScript bridges for native app communication
 - **Universal**: One button works across all Palace app platforms
 
+**MeBooks Web Reader Integration:**
+- **Web-Based**: Full-featured EPUB/PDF reader in browser
+- **OPDS 1 & 2**: Complete catalog browsing and book management
+- **Offline-First**: Books stored locally with IndexedDB
+- **Authentication**: Supports Basic Auth, OAuth, SAML for library access
+- **Cross-Platform**: Works on any modern web browser
+
 **Thorium Desktop Integration:**
 - **Desktop Only**: Uses `opds://` URL scheme
 - **Cross-Platform**: Works on Windows, macOS, Linux
 - **Direct Launch**: Opens library catalog directly in Thorium
 
-#### 4. Native App Setup
+#### 4. Web Reader Integration (MeBooks)
+
+To integrate with MeBooks web reader, the target app needs to handle import parameters:
+
+**URL Parameters:**
+- `import`: OPDS catalog URL to automatically add to user's library
+- `name`: Display name for the catalog
+
+**Example Implementation:**
+```javascript
+// In your web reader app (MeBooks, etc.)
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const importUrl = params.get('import');
+  const catalogName = params.get('name');
+  
+  if (importUrl && catalogName) {
+    // Auto-add OPDS catalog to user's library
+    addOPDSCatalog(importUrl, catalogName);
+    
+    // Optional: Navigate to the new catalog
+    navigateToCatalog(importUrl);
+  }
+}, []);
+
+const addOPDSCatalog = async (url: string, name: string) => {
+  // Add to user's catalog list
+  const catalog = {
+    id: generateId(),
+    name,
+    url,
+    type: 'opds',
+    dateAdded: new Date().toISOString()
+  };
+  
+  // Save to localStorage or IndexedDB
+  await saveCatalog(catalog);
+};
+```
+
+**Benefits:**
+- **Seamless Discovery**: Users can discover and start reading in one click
+- **No Manual Setup**: Catalog automatically appears in reader app
+- **Cross-Platform**: Works with any web-based OPDS reader
+- **Bookmarkable**: Users can bookmark specific catalogs
+
+#### 5. Native App Setup
 
 **iOS (Swift):**
 ```swift
