@@ -5,9 +5,8 @@ const REGISTRY_URL = 'https://registry.palaceproject.io/libraries';
 export const fetchLibraries = async (): Promise<LibraryDisplay[]> => {
   try {
     // The Palace Project registry API does not support CORS for browser-based fetch requests.
-    // We use a public CORS proxy to bypass this restriction.
-    // Switching to corsproxy.io as allorigins.win was causing Content-Length mismatch errors.
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(REGISTRY_URL)}`;
+    // Use a local proxy server to bypass CORS in development.
+    const proxyUrl = '/api/libraries';
     
     const response = await fetch(proxyUrl);
     if (!response.ok) {
