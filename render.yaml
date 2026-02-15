@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: palace-registry-ui
+    env: node
+    buildCommand: npm ci && npm run build
+    startCommand: node proxy-server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
