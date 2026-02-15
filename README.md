@@ -230,14 +230,11 @@ The registry includes a lightweight JavaScript library for easy MeBooks integrat
 
 **Step 1: Include the script**
 ```html
-<script src="https://jamesenglish1028.github.io/https-github.com-JamesEnglish1028-palace_registry_ui/mebooks-integration.js"></script>
 ```
 
 **Step 2: Initialize**
 ```javascript
-const mebooks = new MeBooksIntegration('https://your-mebooks-url.com/');
 // Or use default MeBooks URL:
-const mebooks = new MeBooksIntegration();
 ```
 
 **Step 3: Use**
@@ -366,3 +363,11 @@ For issues related to:
 - **This app:** Create an issue in this repository
 - **Palace Project:** Visit [The Palace Project](https://thepalaceproject.org)
 - **Library access:** Contact your local library directly
+
+## Render Deployment
+
+Render deployment files are included:
+- `render.yaml` (Blueprint config)
+- `DEPLOY_RENDER.md` (step-by-step guide)
+
+For quick setup, follow `/Users/jamesenglish/Desktop/Projects/Registry UI/https-github.com-JamesEnglish1028-palace_registry_ui/DEPLOY_RENDER.md`.

@@ -1,11 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
 export async function fetchGeoJson(url: string) {
   try {
-    const response = await axios.get(url);
+    const response = await axios.get('/api/geojson', {
+      params: { url }
+    });
     return response.data;
   } catch (error) {
-    console.error("Failed to fetch GeoJSON:", error);
+    console.error('Failed to fetch GeoJSON:', error);
     return null;
   }
 }
